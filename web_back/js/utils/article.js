@@ -25,6 +25,12 @@ var article = {
                 callBack(res);
             }
         })
+    },
+    edit:function(callBack){
+        $.post(URLIST.article_edit,function(res){
+            callBack(res);
+        })
     }
+    
 
 }

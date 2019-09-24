@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/iconfont.css">
     <link rel="stylesheet" href="css/main.css">
     <link type="text/css" rel="stylesheet" href="js/jedate/css/jedate.css">
-    <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="js/lib/jquery-1.12.4.min.js"></script>
     <script src="js/jedate/js/jedate.js"></script>
     <script src="js/tinymce/js/tinymce/tinymce.min.js"></script>
     <script src="js/tinymce/js/tinymce_setup.js"></script>
@@ -66,18 +66,46 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="rich_content" name="content" placeholder="文章内容" value="文章内容">
+                        <input type="text" class="form-control" id="rich_content" name="content" placeholder="文章内容"
+                            value="文章内容">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">修改</button>
+                        <button id="editBtn" type="button" class="btn btn-success">修改</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
+    <script src="./js/utils/config.js"></script>
+    <script src="./js/utils/article.js"></script>
+    <script>
+        $(function () {
+            //获取当前的id值，在地址栏中
+            // console.log(location.href);
+            var Url = location.href;
+            var id = Url.split('=')[1];
+            //    console.log(id);
+
+
+            //根据id值先显示出当前点击的文章的所有信息
+            article.show({id:id},function(res){
+                console.log(res);
+                if(res.code == 200){
+                    //查询成功，渲染到合适的输入框内，以便修改
+                    
+                }
+            })
+
+        })
+
+
+
+    </script>
 
 </body>
+
+
 
 </html>
