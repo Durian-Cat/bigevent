@@ -4,10 +4,12 @@ var URLIST = {
   user_logout: BASE_URL + '/admin/logout',
   user_info: BASE_URL + '/admin/getuser',
 
-  category_show:BASE_URL +'/admin/category_search',
-  category_del:BASE_URL+'/admin/category_delete',
-  category_add:BASE_URL+'/admin/category_add',
-  category_edit:BASE_URL+'/admin/category_edit',
+  category_show: BASE_URL + '/admin/category_search',
+  category_del: BASE_URL + '/admin/category_delete',
+  category_add: BASE_URL + '/admin/category_add',
+  category_edit: BASE_URL + '/admin/category_edit',
 
-  article_show:BASE_URL+'/admin/search',
+  article_show: BASE_URL + '/admin/search',
+  article_del: BASE_URL + '/admin/article_delete',
+  article_add: BASE_URL + '/admin/article_publish',
 };
