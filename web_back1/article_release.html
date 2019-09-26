@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>文章列表</title>
+    <link rel="stylesheet" href="js/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/iconfont.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link type="text/css" rel="stylesheet" href="js/jedate/css/jedate.css">
+    <script src="js/lib/jquery-1.12.4.min.js"></script>
+    <script src="js/jedate/js/jedate.js"></script>
+    <script src="js/tinymce/js/tinymce/tinymce.min.js"></script>
+    <script src="js/tinymce/js/tinymce_setup.js"></script>
+    <script src="js/utils/config.js"></script>
+    <script src="js/utils/category.js"></script>
+    <script src="js/utils/article.js"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="common_title">
+            写文章
+        </div>
+        <div class="container-fluid common_con">
+            <form class="form-horizontal article_form" id="myForm">
+                <div class="form-group">
+                    <!-- 特别注意此处的name属性设置！！！ -->
+                    <label for="inputEmail3" class="col-sm-2 control-label">文章标题：</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control"  name="title" id="inputEmail3" placeholder="文章标题">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">文章封面：</label>
+                    <div class="col-sm-10">
+                        <input type="file" id="exampleInputFile" name="cover">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">文章类别：</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" name="type" id="artical_release">
+
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">发布时间：</label>
+                    <div class="col-sm-4">
+
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="date" placeholder="YYYY-MM-DD" id="dateinput">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button"
+                                    onclick="jeDate('#dateinput',{trigger:false,format: 'YYYY-MM-DD'})"><i
+                                        class="iconfont icon-icondate"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
+                    <div class="col-sm-10">
+                            <textarea class="form-control" id="rich_content" name="content" placeholder="文章内容">
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda fugiat illo nihil molestias ab. Laborum eius non atque, totam sapiente quae obcaecati assumenda ratione inventore pariatur maiores, qui libero delectus.
+                                    </textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-success" id="release">发布</button>
+                        <button type="submit" class="btn btn-default">存为草稿</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- 引入js文件 -->
+    <script src="js/lib/template-web.js"></script>
+    <!-- 定义模板 -->
+    <script id="tmp" type="text/html">
+        <!-- 注意此处的格式，否则会出错 -->
+        {{each data item}}
+    <option>{{item.name}}</option>
+    {{/each}}
+    </script>
+    <script>
+        category.queryArtical(function (res) {
+            var html = template('tmp', res);
+            $('#artical_release').html(html);
+        })
+    </script>
+    <script>
+        //
+        $('#release').click(function() {
+            var fd = new FormData(document.getElementById('myForm'));
+            //给formdata新增一个属性
+            fd.append('state','已发布');
+            fd.set('content', tinyMCE.activeEditor.getContent());
+            console.log(fd.get('content'));
+            article.release_arti(fd,function(res) {
+                console.log(res);
+                // if(res.code==201) {
+                //     window.location.href='/article_list.html';
+                // }
+                // window.location.href='/article_list.html';
+            })
+        })
+            
+            // title string 文章标题
+            // cover file 文章封面图片
+            // type number 文章类型id
+            // date string 日期
+            // content string 文章内容
+            // state string 文章状态(草稿或已发布)
+    </script>
+</body>
+
+</html>

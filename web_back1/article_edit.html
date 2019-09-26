@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>文章列表</title>
+    <link rel="stylesheet" href="js/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/iconfont.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link type="text/css" rel="stylesheet" href="js/jedate/css/jedate.css">
+    <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="js/jedate/js/jedate.js"></script>
+    <script src="js/tinymce/js/tinymce/tinymce.min.js"></script>
+    <script src="js/tinymce/js/tinymce_setup.js"></script>
+    <script src="js/lib/jquery-1.12.4.min.js"></script>
+    <script src="js/utils/config.js"></script>
+    <script src="js/utils/category.js"></script>
+    <script src="js/utils/article.js"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="common_title">
+            文章编辑
+        </div>
+        <div class="container-fluid common_con">
+            <form class="form-horizontal article_form" id="myform">
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">文章标题：</label>
+                    <div class="col-sm-10">
+                        <input id="title" name="title" class="form-control" value="文章标题文字">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">文章封面：</label>
+                    <div class="col-sm-10">
+                        <img src="images/pic06.jpg" id="cover" class="article_cover">
+                        <input type="file" id="exampleInputFile" name="cover">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">文章类别：</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" value="" id="type" name="type">
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">发布时间：</label>
+                    <div class="col-sm-4">
+
+                        <div class="input-group">
+                                <input type="text" class="form-control" name="date" id="dateinput" />
+                                <span class="input-group-btn">
+                                  <button class="btn btn-default" type="button" onclick="jeDate('#dateinput',{trigger:false,format: 'YYYY-MM-DD'})"><i class="iconfont icon-icondate"></i></button>
+                                </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="rich_content" name="content" placeholder="文章内容"
+                            value="文章内容">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" id="editbtn" class="btn btn-success">修改</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="js/lib/template-web.js"></script>
+    <script id="tmp" type="text/html">
+        {{each data item}}
+        <option value="{{item.id}}">{{item.name}}</option>
+        {{/each}}
+    </script>
+    <script>
+        //得到?id=273
+        var str = window.location.search;
+        var obj = {};
+        formId(str);
+        //要获取id值
+        function formId(str) {
+            //得到id=
+            var string = str.substr(1);
+            string = string.split('=');
+            obj[string[0]] = string[1];
+        };
+        //将文章类别显示在下拉列表中
+        category.queryArtical(function (res) {
+            var html = template('tmp', res);
+            $('#type').html(html);
+        });
+        //获取文章详情并显示
+        article.search_arti(obj, function (res) {
+            $('#title').val(res.data.title);
+            $('#cover').prop('src', res.data.cover);
+            $('#dateinput').val(res.data.date);
+            $('#type').val(res.data.type);
+            setTimeout(function () {
+                tinymce.activeEditor.setContent(res.data.content);
+            }, 2000);
+            //点击修改按钮后，获取文章的新信息(表单信息)
+            $('#editbtn').click(function () {
+                //文章编辑
+                console.log(res.data);
+                var fd=new FormData($('#myform')[0]);
+                fd.append('id',res.data.id);
+                fd.set('content', tinyMCE.activeEditor.getContent());
+                article.edit_arti(fd,function(result) {
+                    console.log(result);
+                    if(result.code==200) {
+                        alert('修改成功');
+                        console.log(fd.get('date'));
+                        // window.location.href='./article_list.html';
+                    }
+                });
+               //文章发布
+            //    article.release_arti(fd,function(res) {
+            //        console.log(res);
+            //     // window.location.href = '/article_list.html';
+            //    })
+            })
+        })
+    </script>
+</body>
+
+</html>

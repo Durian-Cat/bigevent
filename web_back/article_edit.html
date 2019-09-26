@@ -99,7 +99,7 @@
     <script src="./js/lib/template-web.js"></script>
     <script id="tmp" type="text/html">
         {{each data item}}
-        <option>{{item.name}}</option>
+        <option value="{{item.id}}">{{item.name}}</option>
          
         {{/each}}
     
@@ -143,10 +143,13 @@
                             //类别
                             //用模板引擎，将类别渲染在页面上
                             var type = res.data.type;
+                            console.log(type);
+                            
                             category.show(function (res) {
                                 // console.log(res);
                                 if (res.code === 200) {
                                     $('#category_type').html(template('tmp', res));
+                                    // console.log($('#category_type').val());
                                     // console.log(type);
                                     $('#category_type').val(type);
 
