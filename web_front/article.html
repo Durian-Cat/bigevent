@@ -58,21 +58,11 @@
             <div class="breadcrumb">
                 当前位置： <a href="#">首页</a> &gt; <a href="#">科技</a> &gt; 文章详情
             </div>
-            <h3 class="article_title">马斯克的新花样？连接人脑和电脑的初创公司又筹了一笔钱</h3>
-            <div class="article_info">杰克 发布于 2019-05-08 07:08:46&nbsp;&nbsp;&nbsp;分类: 奇趣事&nbsp;&nbsp;&nbsp;阅读:
-                (98)&nbsp;&nbsp;&nbsp;评论: (0)</div>
-            <div class="article_con">
-
-                <p>“上天入地”还不够？硅谷“钢铁侠”马斯克名下一家低调的公司最近又融了一大笔钱。</p>
-
-                <p>马斯克投资的一家小型且不为人熟知的脑机接口（brain-computer
-                    interface）公司Neuralink披露，该公司融到了3900万美元，虽然不及公司计划的融资额5100万美元，但也比上次的融资多了不少。</p>
-
-                <p>两年前该公司曾计划融资1亿美元，但只拿到了2700万美元的融资。</p>
-
-                <p>在Neuralink递交给美国证券交易委员会（SEC）的材料中，并没有披露融资是否来自传统的风险投资者或者来自该公司的员工。</p>
-
-                <p>2016年，Neuralink在美国加利福尼亚州以医学研究公司的名义成立，之后一直低调运行。</p>
+            <h3 id="article_title" class="article_title">马斯克的新花样？连接人脑和电脑的初创公司又筹了一笔钱</h3>
+            <div class="article_info"> <span id="article_author"></span> 发布于 <span
+                    id="article_date"></span>&nbsp;&nbsp;&nbsp;分类: <span id="article_type"></span>&nbsp;&nbsp;&nbsp;阅读:
+                <span id="article_read"></span> &nbsp;&nbsp;&nbsp;评论: <span id="article_comment"></span></div>
+            <div id="article_content" class="article_con">
 
             </div>
             <div class="article_links">
@@ -83,49 +73,23 @@
             <form action="" class="comment_form">
                 <div class="form_group">
                     <label>用户名：</label>
-                    <input type="text" placeholder="请输入用户名" class="comment_name">
+                    <input id="comment_name" type="text" placeholder="请输入用户名" class="comment_name">
                 </div>
                 <div class="form_group">
                     <label>评论内容：</label>
-                    <textarea placeholder="请发表您的评论" class="comment_input"></textarea>
+                    <textarea id="comment_content" placeholder="请发表您的评论" class="comment_input"></textarea>
                 </div>
                 <div class="form_group">
-                    <input type="submit" name="" value="评 论" class="comment_sub"></div>
+                    <input id="commentBtn" type="button" name="" value="评 论" class="comment_sub"></div>
             </form>
 
             <div class="comment_count">
                 4条评论
             </div>
 
-            <div class="comment_list_con">
-                <div class="comment_detail_list">
-                    <div class="person_pic fl">乔</div>
-                    <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
-                    <div class="comment_text fl">
-                        遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                    </div>
-                </div>
-                <div class="comment_detail_list">
-                    <div class="person_pic fl">段</div>
-                    <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
-                    <div class="comment_text fl">
-                        遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                    </div>
-                </div>
-                <div class="comment_detail_list">
-                    <div class="person_pic fl">虚</div>
-                    <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
-                    <div class="comment_text fl">
-                        遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                    </div>
-                </div>
-                <div class="comment_detail_list">
-                    <div class="person_pic fl">王</div>
-                    <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
-                    <div class="comment_text fl">
-                        遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                    </div>
-                </div>
+            <div id="commentContent" class="comment_list_con">
+
+
             </div>
         </div>
         <div class="right_con setfl">
@@ -205,6 +169,138 @@
         <p>电话：0755-****888 粤ICP备*******8号</p>
     </div>
 
+
+    <script src="./js/jquery-1.12.4.min.js"></script>
+    <script src="./js/utils/config.js"></script>
+    <script src="/js/utils/news.js"></script>
+    <script src="./js/utils/comment.js"></script>
+    <script src="./js/template-web.js"></script>
+    <script id="tmp" type="text/html">
+        {{each data item}}
+        
+            <div class="comment_detail_list">
+                <div class="person_pic fl">{{item.name.substr(0,1)}}</div>
+                <div class="name_time fl"><b>{{item.name}}</b><span>{{item.dt}}</span></div>
+                <div class="comment_text fl">
+                    {{item.content}}
+                </div>
+            </div>
+
+        {{/each}}
+    </script>
+
+    <script>
+        $(function () {
+            //获取当前的id值，在地址栏中
+            // console.log(location.href);
+            //先去除开始的？
+            var str = window.location.search.replace('?', '');
+            //    对拿到的地址进行处理,防止用户的非法输入,比如输入的是id=123&a=1&b=2
+            // console.log(str);
+            //id=123&a=1&b=2转化成{id:123,a:1,b:2}
+            function getID(str) {
+                var arr = str.split('&');
+                var obj = {};
+                arr.forEach(function (item, i) {
+                    var arr1 = item.split('=');
+                    obj[arr1[0]] = arr1[1];
+                })
+                return obj;
+            }
+            var id = getID(str).id;  // 得到id值
+            // console.log(id);
+            getAndShow(id);
+            function getAndShow(id) {
+
+
+                article.search({ id: id }, function (res) {
+                    if (res.code === 200) {
+                        console.log(res);
+                        
+                        $('#article_title').html(res.data.title);
+                        $('#article_author').html(res.data.author);
+                        $('#article_date').html(res.data.date);
+                        $('#article_content').html(res.data.content);
+                        $('#article_type').html(res.data.type);
+                        $('#article_comment').html(res.data.comment);
+                        $('#article_read').html(res.data.read);
+
+
+                    }
+
+                })
+
+
+                comment.show(id, function (res) {
+                    // console.log(res);
+                    if (res.code === 200) {
+
+                        res.data.forEach(function (item) {
+                            // console.log(item);
+
+                            item.dt = getTime(item.dt);
+                        })
+                        $('#commentContent').html(template('tmp', res));
+                    }
+
+                })
+
+            }
+            //发表评论
+
+            $('#commentBtn').click(function () {
+                var name = $('#comment_name').val().trim();
+                var content = $('#comment_content').val().trim();
+                if (name == '' || content == '') {
+                    alert('输入内容不能为空！')
+                } else {
+                    comment.add({ name: name, content: content, article_id: id }, function (res) {
+                        if (res.code == 200) {
+                            $('#comment_name').val('');
+                            $('#comment_content').val('');
+                            getAndShow(id);
+
+                        }
+
+                    })
+                }
+
+            })
+
+            //对时间进行处理
+            function getTime(dt) {
+                var len = Math.floor((Date.now() - dt) / 1000);
+                // console.log(len);
+
+                var day = Math.floor(len / (24 * 60 * 60));
+                // console.log(day);
+                var hours = Math.floor((len - day * 24 * 60 * 60) / (60 * 60));
+                // console.log(hours);
+                var minute = Math.floor((len - day * 24 * 60 * 60 - hours * 60 * 60) / 60);
+                // console.log(minute);
+                var str = '';
+                if (day != 0) {
+                    day += '天';
+                    str += day;
+                }
+                if (hours != 0) {
+                    hours += '小时';
+                    str += hours;
+                }
+                if (minute != 0) {
+                    minute += '分钟';
+                    str += minute;
+                }
+
+                return str + '前';
+            }
+
+        })
+
+
+
+
+    </script>
 </body>
 
 </html>
