@@ -15,37 +15,52 @@
     <script src="js/jedate/js/jedate.js"></script>
     <script src="js/tinymce/js/tinymce/tinymce.min.js"></script>
     <script src="js/tinymce/js/tinymce_setup.js"></script>
+    <script src="./js/bootstrap/js/bootstrap.min.js"></script>
 </head>
 
 <body>
+    <!-- 模态框 -->
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="pResult"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     <div class="container-fluid">
         <div class="common_title">
             文章编辑
         </div>
         <div class="container-fluid common_con">
-            <form class="form-horizontal article_form">
+            <form id="myForm" class="form-horizontal article_form">
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章标题：</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputEmail3" value="文章标题文字">
+                        <input name="title" type="text" class="form-control" id="article_title" value="文章标题文字">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">文章封面：</label>
                     <div class="col-sm-10">
-                        <img src="images/pic06.jpg" class="article_cover">
-                        <input type="file" id="exampleInputFile">
+                        <img id="article_cover" src="images/pic06.jpg" class="article_cover">
+                        <input name="cover" type="file" id="exampleInputFile">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章类别：</label>
                     <div class="col-sm-4">
-                        <select class="form-control">
-                            <option>类别一</option>
-                            <option>类别二</option>
-                            <option>类别三</option>
-                            <option selected>类别四</option>
-                            <option>类别五</option>
+                        <select id="category_type" name="type" class="form-control">
+
                         </select>
                     </div>
                 </div>
@@ -54,9 +69,9 @@
                     <div class="col-sm-4">
 
                         <div class="input-group">
-                            <input type="text" class="form-control" value="2019-05-17" id="dateinput">
+                            <input name="date" type="text" class="form-control" value="2019-05-17" id="dateinput">
                             <span class="input-group-btn">
-                                <button class="btn btn-default" type="button"
+                                <button name="date" class="btn btn-default" type="button"
                                     onclick="jeDate('#dateinput',{trigger:false,format: 'YYYY-MM-DD'})"><i
                                         class="iconfont icon-icondate"></i></button>
                             </span>
@@ -79,26 +94,102 @@
         </div>
     </div>
     <script src="./js/utils/config.js"></script>
+    <script src="./js/utils/category.js"></script>
     <script src="./js/utils/article.js"></script>
+    <script src="./js/lib/template-web.js"></script>
+    <script id="tmp" type="text/html">
+        {{each data item}}
+        <option>{{item.name}}</option>
+         
+        {{/each}}
+    
+    
+    
+    </script>
     <script>
         $(function () {
             //获取当前的id值，在地址栏中
             // console.log(location.href);
-            var Url = location.href;
-            var id = Url.split('=')[1];
-            //    console.log(id);
+            //先去除开始的？
+            var str = window.location.search.replace('?', '');
+            //    对拿到的地址进行处理,防止用户的非法输入,比如输入的是id=123&a=1&b=2
+            // console.log(str);
+            //id=123&a=1&b=2转化成{id:123,a:1,b:2}
+            function getID(str) {
+                var arr = str.split('&');
+                var obj = {};
+                arr.forEach(function (item, i) {
+                    var arr1 = item.split('=');
+                    obj[arr1[0]] = arr1[1];
+                })
+                return obj;
+            }
+            var id = getID(str).id;  // 得到id值
+            // console.log(id);
+            getAndShow(id);
+            function getAndShow(id) {
+                if (isNaN(id)) {
+                    alert('id错误！')
+                } else {
+                    //根据id值先显示出当前点击的文章的所有信息
+                    article.show({ id: id }, function (res) {
+                        // console.log(res);
+                        if (res.code == 200) {
+                            //查询成功，渲染到合适的输入框内，以便修改
+                            // console.log(res);
+                            $('#article_title').val(res.data.title);
+                            $('#article_cover').attr('src', res.data.cover);
+
+                            //类别
+                            //用模板引擎，将类别渲染在页面上
+                            var type = res.data.type;
+                            category.show(function (res) {
+                                // console.log(res);
+                                if (res.code === 200) {
+                                    $('#category_type').html(template('tmp', res));
+                                    // console.log(type);
+                                    $('#category_type').val(type);
+
+                                }
+
+                            })
+
+                            $('#dateinput').val(res.data.date);
+                            // $('#rich_content').val(res.data.content);
+                            setTimeout(function () {
+                                // 如果不设置延迟，可能会报错。报错的原因是tinyMCE还没有准备就绪，就给它设置了内容
+                                tinyMCE.activeEditor.setContent(res.data.content);
+                            }, 1000);
 
 
-            //根据id值先显示出当前点击的文章的所有信息
-            article.show({id:id},function(res){
-                console.log(res);
-                if(res.code == 200){
-                    //查询成功，渲染到合适的输入框内，以便修改
-                    
+                        }
+                    })
                 }
+            }
+
+
+            $('#editBtn').click(function () {
+                var fd = new FormData($('#myForm')[0]);
+                fd.append('id', id);
+                fd.set('content', tinyMCE.activeEditor.getContent());
+                article.edit(fd, function (res) {
+                    console.log(res);
+                    if (res.code == 200) {
+                        $('#myModal').modal('show');
+                        $('#pResult').html(res.msg);
+                        // window.location.href = './article_list.html';
+                    }else{
+                        $('#myModal').modal('show');
+                        $('#pResult').html(res.msg);
+                    }
+
+                })
+
             })
 
+
         })
+
 
 
 

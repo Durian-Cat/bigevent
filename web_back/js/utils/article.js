@@ -26,9 +26,16 @@ var article = {
             }
         })
     },
-    edit:function(callBack){
-        $.post(URLIST.article_edit,function(res){
-            callBack(res);
+    edit:function(fd,callBack){
+        $.ajax({
+            url:URLIST.article_edit,
+            type:'post',
+            data:fd,
+            processData:false,
+            contentType:false,
+            success:function(res){
+                callBack(res);
+            }
         })
     }
     
